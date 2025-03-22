@@ -2,3 +2,7 @@ name: maridao
 version: '1.0-SNAPSHOT'
 main: io.pluginteste.maridao.Maridao
 api-version: '1.21'
+commands:
+  hello:
+    description: Diz olá no chat.
+    usage: /<command>
