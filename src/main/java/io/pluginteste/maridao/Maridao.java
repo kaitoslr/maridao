@@ -9,13 +9,11 @@ public final class Maridao extends JavaPlugin {
 
     @Override
     public void onEnable() {
-        // Este método é chamado quando o plugin é carregado
         getLogger().info("MeuPluginPaper foi habilitado!");
     }
 
     @Override
     public void onDisable() {
-        // Este método é chamado quando o plugin é desativado
         getLogger().info("MeuPluginPaper foi desabilitado!");
     }
 
