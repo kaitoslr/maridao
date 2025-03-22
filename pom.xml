@@ -7,19 +7,18 @@
     <groupId>io.pluginteste</groupId>
     <artifactId>maridao</artifactId>
     <version>1.0-SNAPSHOT</version>
-    <packaging>jar</packaging> <!-- Isso garante que o Maven crie um arquivo .jar -->
+    <packaging>jar</packaging>
 
     <name>maridao</name>
 
     <properties>
-        <java.version>21</java.version> <!-- Certifique-se de usar um JDK compatível -->
+        <java.version>23</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
     <build>
         <defaultGoal>clean package</defaultGoal>
         <plugins>
-            <!-- Maven Compiler Plugin para compilar o código -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -29,24 +28,29 @@
                     <target>${java.version}</target>
                 </configuration>
             </plugin>
-
-            <!-- Maven Jar Plugin para gerar o .jar -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-jar-plugin</artifactId>
-                <version>3.1.0</version>
+                <artifactId>maven-resources-plugin</artifactId>
+                <version>3.3.1</version>
                 <executions>
                     <execution>
-                        <phase>package</phase>
+                        <phase>process-resources</phase>
                         <goals>
-                            <goal>jar</goal> <!-- Isso cria um .jar simples -->
+                            <goal>copy-resources</goal>
                         </goals>
+                        <configuration>
+                            <outputDirectory>${project.build.outputDirectory}</outputDirectory>
+                            <resources>
+                                <resource>
+                                    <directory>src/main/resources</directory>
+                                    <filtering>false</filtering>
+                                </resource>
+                            </resources>
+                        </configuration>
                     </execution>
                 </executions>
             </plugin>
         </plugins>
-
-        <!-- Recursos que serão copiados para o .jar -->
         <resources>
             <resource>
                 <directory>src/main/resources</directory>
@@ -70,8 +74,8 @@
         <dependency>
             <groupId>io.papermc.paper</groupId>
             <artifactId>paper-api</artifactId>
-            <version>1.21.4-R0.1-SNAPSHOT</version> <!-- Verifique se a versão está correta -->
-            <scope>provided</scope> <!-- Isso garante que o PaperMC será fornecido pelo servidor -->
+            <version>1.21.4-R0.1-SNAPSHOT</version>
+            <scope>provided</scope>
         </dependency>
     </dependencies>
 </project>
