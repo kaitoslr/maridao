@@ -26,7 +26,6 @@ public final class Maridao extends JavaPlugin {
     public void onEnable() {
         // Plugin startup logic
         getCommand("ola").setExecutor(new ComandoOla());
-        getCommand("acessorios").setExecutor(new Acessorios());
         getServer().getPluginManager().registerEvents(new EventoEntrada(), this);
         getCommand("espadatrovao").setExecutor((sender, command, label, args) -> {
             if (sender instanceof Player) {
@@ -48,7 +47,6 @@ public final class Maridao extends JavaPlugin {
     public static class Acessorios implements CommandExecutor {
         public boolean onCommand(CommandSender sender, Command command, String label, String[] args){
             if(command.getName().equalsIgnoreCase("acessorios")){
-                
                 if(args.length < 1 ){
                     sender.sendMessage("Voce deve passar um tipo de acessorio!!!");
                 }
@@ -62,24 +60,12 @@ public final class Maridao extends JavaPlugin {
 
                         sender.sendMessage("Acesserio aureola equipado!!!");
 
-                        render();
-
                     }
                 } catch (CommandException e) {
                     throw new CommandException();
                 }
             }
             return true;
-
-        }
-
-        private void render() {
-            new BukkitRunnable() {
-                @Override
-                public void run() {
-                    Particle particula = Particle.valueOf("splash");
-                }
-            }.runTaskTimer((Plugin) this, 0L, 1L); // Roda a cada tick (1L)
         }
     }
 
@@ -129,5 +115,3 @@ public final class Maridao extends JavaPlugin {
         }
     }
 }
-
-
