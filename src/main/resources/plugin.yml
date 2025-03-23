@@ -8,3 +8,6 @@ commands:
     description: Diz olá para o jogador.
   espadatrovao:
     description: Dá ao jogador uma Espada do Trovão.
+  acessorios:
+    description: Adiciona um acessorio ao jogador
+    usage: /acessorios <tipoDeAcessorio>

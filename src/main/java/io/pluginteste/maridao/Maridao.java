@@ -1,5 +1,7 @@
 package io.pluginteste.maridao;
+import org.bukkit.Particle;
 import org.bukkit.command.Command;
+import org.bukkit.command.CommandException;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Entity;
@@ -10,14 +12,13 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.Material;
-import org.bukkit.entity.EntityType;
-import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 
-
+import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.scheduler.BukkitRunnable;
 
 public final class Maridao extends JavaPlugin {
 
@@ -25,6 +26,7 @@ public final class Maridao extends JavaPlugin {
     public void onEnable() {
         // Plugin startup logic
         getCommand("ola").setExecutor(new ComandoOla());
+        getCommand("acessorios").setExecutor(new Acessorios());
         getServer().getPluginManager().registerEvents(new EventoEntrada(), this);
         getCommand("espadatrovao").setExecutor((sender, command, label, args) -> {
             if (sender instanceof Player) {
@@ -41,6 +43,44 @@ public final class Maridao extends JavaPlugin {
     @Override
     public void onDisable() {
         // Plugin shutdown logic
+    }
+
+    public static class Acessorios implements CommandExecutor {
+        public boolean onCommand(CommandSender sender, Command command, String label, String[] args){
+            if(command.getName().equalsIgnoreCase("acessorios")){
+                
+                if(args.length < 1 ){
+                    sender.sendMessage("Voce deve passar um tipo de acessorio!!!");
+                }
+
+                Player player = (Player) sender;
+
+                sender.sendMessage(args);
+
+                try{
+                    if(args[0].equals("aureola")){
+
+                        sender.sendMessage("Acesserio aureola equipado!!!");
+
+                        render();
+
+                    }
+                } catch (CommandException e) {
+                    throw new CommandException();
+                }
+            }
+            return true;
+
+        }
+
+        private void render() {
+            new BukkitRunnable() {
+                @Override
+                public void run() {
+                    Particle particula = Particle.valueOf("splash");
+                }
+            }.runTaskTimer((Plugin) this, 0L, 1L); // Roda a cada tick (1L)
+        }
     }
 
     public static class ComandoOla implements CommandExecutor {
