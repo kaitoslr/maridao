@@ -1,3 +1,11 @@
 # Default ignored files
 /shelf/
 /workspace.xml
+# Ignorar pasta do IntelliJ IDEA
+.idea/
+
+# Ignorar arquivos do projeto do IntelliJ IDEA
+*.iml
+
+# Ignorar pasta target (build do Maven)
+/target/
