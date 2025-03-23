@@ -1,5 +1,4 @@
 package io.pluginteste.maridao;
-import org.bukkit.Color;
 import org.bukkit.Location;
 import org.bukkit.Particle;
 import org.bukkit.command.Command;
@@ -18,6 +17,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
+import HGclasses.Classes;
 
 public final class Maridao extends JavaPlugin {
 
@@ -28,7 +28,15 @@ public final class Maridao extends JavaPlugin {
         // Plugin startup logic
         getCommand("ola").setExecutor(new ComandoOla());
         getCommand("acessorios").setExecutor(new Acessorios(this));
-        getServer().getPluginManager().registerEvents(new EventoEntrada(), this);
+        getCommand("stomper").setExecutor((sender, command, label, args) -> {
+            if (sender instanceof Player) {
+                Player jogador = (Player) sender;
+                jogador.getInventory().addItem(Classes.getBoots());
+                jogador.sendMessage("§aVocê recebeu a botas de stomper!");
+            }
+            return true;
+        });
+        getServer().getPluginManager().registerEvents(new Classes(), this);
         getCommand("espadatrovao").setExecutor((sender, command, label, args) -> {
             if (sender instanceof Player) {
                 Player jogador = (Player) sender;
@@ -94,17 +102,19 @@ public final class Maridao extends JavaPlugin {
 
                     if(args[0].equals("asas")){
 
-                        tickCounter++;
-
-                        if(tickCounter % 20 == 0){
-                            tickCounter = 0;
-                        }
-
                         sender.sendMessage("Acesserio asas equipado!!!");
 
                         new BukkitRunnable() {
+
                             @Override
                             public void run() {
+
+                                tickCounter++;
+
+                                if(tickCounter % 100 == 0){
+                                    tickCounter = 0;
+                                }
+
                                 Location loc = player.getLocation();
 
                                 asas(loc, player, tickCounter);
@@ -131,11 +141,12 @@ public final class Maridao extends JavaPlugin {
             for (double i = 0; i < max; i++) {
 
                 double x = 0;
-                if(time <= 10){
-                    x = time/10 * asasBater(i) * Math.sin(i);
+
+                if(time <= 50){
+                    x = time/100 * asasBater(i) * Math.sin(i);
                 }
-                if(time > 10){
-                    x = (2-(time/10)) * asasBater(i) * Math.sin(i);
+                if(time > 50){
+                    x = (10-(time/100)) * asasBater(i) * Math.sin(i);
                 }
                 double y = asasBater(i) * Math.cos(i);
 

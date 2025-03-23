@@ -11,3 +11,5 @@ commands:
   acessorios:
     description: Adiciona um acessorio ao jogador
     usage: /acessorios <tipoDeAcessorio>
+  stomper:
+    description: Botas de stomper
