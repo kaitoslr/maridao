@@ -1,4 +1,5 @@
 package io.pluginteste.maridao;
+import org.bukkit.Location;
 import org.bukkit.Particle;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandException;
@@ -20,13 +21,15 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import java.util.function.LongConsumer;
+
 public final class Maridao extends JavaPlugin {
 
     @Override
     public void onEnable() {
         // Plugin startup logic
         getCommand("ola").setExecutor(new ComandoOla());
-        getCommand("acessorios").setExecutor(new Acessorios());
+        getCommand("acessorios").setExecutor(new Acessorios(this));
         getServer().getPluginManager().registerEvents(new EventoEntrada(), this);
         getCommand("espadatrovao").setExecutor((sender, command, label, args) -> {
             if (sender instanceof Player) {
@@ -46,6 +49,13 @@ public final class Maridao extends JavaPlugin {
     }
 
     public static class Acessorios implements CommandExecutor {
+        private final JavaPlugin plugin;
+
+
+        public Acessorios(JavaPlugin plugin) {
+            this.plugin = plugin;
+        }
+
         public boolean onCommand(CommandSender sender, Command command, String label, String[] args){
             if(command.getName().equalsIgnoreCase("acessorios")){
                 
@@ -62,7 +72,28 @@ public final class Maridao extends JavaPlugin {
 
                         sender.sendMessage("Acesserio aureola equipado!!!");
 
-                        render();
+
+                        Particle particula = Particle.valueOf("HEART");
+
+                        new BukkitRunnable() {
+                            @Override
+                            public void run() {
+                                Location loc = player.getLocation();
+
+                                double newY = loc.getY() + 2;
+
+                                Location newLoc = new Location(loc.getWorld(), loc.getX(), newY, loc.getZ());
+
+                                for (int i = 0; i < 50; i++){
+                                    double angle = 360/50;
+                                    double raio = 1.5;
+                                    Location raius = new Location(loc.getWorld(), loc.getX() + Math.acos(angle * i), newY, loc.getZ() + Math.cos(angle * i));
+                                    player.getWorld().spawnParticle(particula, raius, 10);
+
+                                }
+
+                            }
+                        }.runTaskTimer(plugin, 0L, 1L);
 
                     }
                 } catch (CommandException e) {
@@ -70,17 +101,8 @@ public final class Maridao extends JavaPlugin {
                 }
             }
             return true;
-
         }
 
-        private void render() {
-            new BukkitRunnable() {
-                @Override
-                public void run() {
-                    Particle particula = Particle.valueOf("splash");
-                }
-            }.runTaskTimer((Plugin) this, 0L, 1L); // Roda a cada tick (1L)
-        }
     }
 
     public static class ComandoOla implements CommandExecutor {
