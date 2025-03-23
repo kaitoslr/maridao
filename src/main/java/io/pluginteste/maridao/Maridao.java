@@ -1,4 +1,5 @@
 package io.pluginteste.maridao;
+import org.bukkit.Color;
 import org.bukkit.Location;
 import org.bukkit.Particle;
 import org.bukkit.command.Command;
@@ -15,15 +16,12 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-
-
-import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import java.util.function.LongConsumer;
-
 public final class Maridao extends JavaPlugin {
+
+    private static int tickCounter = 0;
 
     @Override
     public void onEnable() {
@@ -72,25 +70,44 @@ public final class Maridao extends JavaPlugin {
 
                         sender.sendMessage("Acesserio aureola equipado!!!");
 
+                        new BukkitRunnable() {
+                            @Override
+                            public void run() {
+                                Location loc = player.getLocation();
 
-                        Particle particula = Particle.valueOf("HEART");
+                                for (int i = 0; i < 10; i++) {
+                                    double angle = 360.0 / 10.0 * i;
+                                    double raio = 0.3;
+                                    double radian = Math.toRadians(angle);
+
+                                    double circY = loc.getY() + 2.2;
+
+                                    Location raius = new Location(loc.getWorld(), loc.getX() + (Math.sin(radian) * raio), circY, loc.getZ() + (Math.cos(radian) * raio));
+                                    player.getWorld().spawnParticle(Particle.CRIT, raius, 0);
+
+                                }
+
+                            }
+                        }.runTaskTimer(plugin, 0L, 1L);
+
+                    }
+
+                    if(args[0].equals("asas")){
+
+                        tickCounter++;
+
+                        if(tickCounter % 20 == 0){
+                            tickCounter = 0;
+                        }
+
+                        sender.sendMessage("Acesserio asas equipado!!!");
 
                         new BukkitRunnable() {
                             @Override
                             public void run() {
                                 Location loc = player.getLocation();
 
-                                double newY = loc.getY() + 2;
-
-                                Location newLoc = new Location(loc.getWorld(), loc.getX(), newY, loc.getZ());
-
-                                for (int i = 0; i < 50; i++){
-                                    double angle = 360/50;
-                                    double raio = 1.5;
-                                    Location raius = new Location(loc.getWorld(), loc.getX() + Math.acos(angle * i), newY, loc.getZ() + Math.cos(angle * i));
-                                    player.getWorld().spawnParticle(particula, raius, 10);
-
-                                }
+                                asas(loc, player, tickCounter);
 
                             }
                         }.runTaskTimer(plugin, 0L, 1L);
@@ -101,6 +118,32 @@ public final class Maridao extends JavaPlugin {
                 }
             }
             return true;
+        }
+
+        public double asasBater(double bater){
+            return Math.pow(Math.E, Math.cos(bater)) - 2 * Math.cos(bater * 4) + Math.pow(Math.sin(bater/12), 5);
+        }
+
+        public void asas(Location location, Player player, int time){
+
+            int max = 1000;
+
+            for (double i = 0; i < max; i++) {
+
+                double x = 0;
+                if(time <= 10){
+                    x = time/10 * asasBater(i) * Math.sin(i);
+                }
+                if(time > 10){
+                    x = (2-(time/10)) * asasBater(i) * Math.sin(i);
+                }
+                double y = asasBater(i) * Math.cos(i);
+
+                Location newLoc = new Location(location.getWorld(), location.getX() + x, location.getY() + y, location.getZ());
+
+                player.getWorld().spawnParticle(Particle.SMOKE, newLoc, 0);
+
+            }
         }
 
     }
