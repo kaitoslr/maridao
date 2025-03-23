@@ -1,4 +1,21 @@
 package io.pluginteste.maridao;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandExecutor;
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.Material;
+import org.bukkit.entity.EntityType;
+import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
+
+
 
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -7,11 +24,70 @@ public final class Maridao extends JavaPlugin {
     @Override
     public void onEnable() {
         // Plugin startup logic
+        getCommand("ola").setExecutor(new ComandoOla());
+        getServer().getPluginManager().registerEvents(new EventoEntrada(), this);
+        getCommand("espadatrovao").setExecutor((sender, command, label, args) -> {
+            if (sender instanceof Player) {
+                Player jogador = (Player) sender;
+                jogador.getInventory().addItem(EspadaTrovão.criarEspada());
+                jogador.sendMessage("§aVocê recebeu a Espada do Trovão!");
+            }
+            return true;
+        });
 
+        getServer().getPluginManager().registerEvents(new EspadaTrovão(), this);
     }
 
     @Override
     public void onDisable() {
         // Plugin shutdown logic
     }
+
+    public static class ComandoOla implements CommandExecutor {
+        @Override
+        public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+            if (sender instanceof Player) {
+                Player jogador = (Player) sender;
+                jogador.sendMessage("§aOlá, " + jogador.getName() + "! Bem-vindo ao servidor!");
+            } else {
+                sender.sendMessage("Este comando só pode ser usado por jogadores.");
+            }
+            return true;
+        }
+    }
+
+    public class EventoEntrada implements Listener {
+        @EventHandler
+        public void aoEntrar(PlayerJoinEvent event) {
+            Player jogador = event.getPlayer();
+            jogador.sendMessage("§aBem-vindo ao servidor, " + jogador.getName() + "!");
+        }
+    }
+
+    public class EspadaTrovão implements Listener {
+        @EventHandler
+        public void aoUsar(EntityDamageByEntityEvent event) {
+            if(event.getDamager() instanceof Player){
+                Player jogador = (Player) event.getDamager();
+                ItemStack item = jogador.getInventory().getItemInMainHand();
+                Entity target = event.getEntity();
+
+                if (item.getType() == Material.DIAMOND_SWORD && item.hasItemMeta() &&
+                        item.getItemMeta().getDisplayName().equals("§bEspada do Trovão") &&
+                        target instanceof LivingEntity) {
+                    jogador.getWorld().strikeLightning(target.getLocation());
+                }
+            }
+        }
+
+        public static ItemStack criarEspada() {
+            ItemStack espada = new ItemStack(Material.DIAMOND_SWORD);
+            ItemMeta meta = espada.getItemMeta();
+            meta.setDisplayName("§bEspada do Trovão");
+            espada.setItemMeta(meta);
+            return espada;
+        }
+    }
 }
+
+

@@ -2,3 +2,9 @@ name: maridao
 version: '1.0-SNAPSHOT'
 main: io.pluginteste.maridao.Maridao
 api-version: '1.21'
+
+commands:
+  ola:
+    description: Diz olá para o jogador.
+  espadatrovao:
+    description: Dá ao jogador uma Espada do Trovão.
