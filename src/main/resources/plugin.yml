@@ -13,3 +13,5 @@ commands:
     usage: /acessorios <tipoDeAcessorio>
   stomper:
     description: Botas de stomper
+  kangaroo:
+    description: Kit Kangaroo

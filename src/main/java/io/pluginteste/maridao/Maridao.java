@@ -37,6 +37,16 @@ public final class Maridao extends JavaPlugin {
             return true;
         });
         getServer().getPluginManager().registerEvents(new Classes(), this);
+
+        getCommand("kangaroo").setExecutor((sender, command, label, args) -> {
+            if (sender instanceof Player) {
+                Player jogador = (Player) sender;
+                jogador.getInventory().addItem(Classes.getKangaroo());
+                jogador.sendMessage("§aVocê recebeu a botas de stomper!");
+            }
+            return true;
+        });
+
         getCommand("espadatrovao").setExecutor((sender, command, label, args) -> {
             if (sender instanceof Player) {
                 Player jogador = (Player) sender;
