@@ -1,4 +1,5 @@
 package io.pluginteste.maridao;
+import ComandoHome.ComandoHome;
 import org.bukkit.Location;
 import org.bukkit.Particle;
 import org.bukkit.command.Command;
@@ -18,16 +19,28 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 import HGclasses.Classes;
+import org.bukkit.configuration.file.FileConfiguration;
+import ComandoHome.ComandoSetHome;
 
 public final class Maridao extends JavaPlugin {
 
     private static int tickCounter = 0;
+    private FileConfiguration config;
+    private static Maridao instance;
+    public static Maridao getInstance() {return instance;}
 
     @Override
     public void onEnable() {
+        instance = this;
         // Plugin startup logic
         getCommand("ola").setExecutor(new ComandoOla());
+
+        //----------------------------------------------------------------------
+
         getCommand("acessorios").setExecutor(new Acessorios(this));
+
+        //---------------------------------------------------------------------
+
         getCommand("stomper").setExecutor((sender, command, label, args) -> {
             if (sender instanceof Player) {
                 Player jogador = (Player) sender;
@@ -38,6 +51,8 @@ public final class Maridao extends JavaPlugin {
         });
         getServer().getPluginManager().registerEvents(new Classes(), this);
 
+        //-----------------------------------------------------------------------
+
         getCommand("kangaroo").setExecutor((sender, command, label, args) -> {
             if (sender instanceof Player) {
                 Player jogador = (Player) sender;
@@ -46,6 +61,7 @@ public final class Maridao extends JavaPlugin {
             }
             return true;
         });
+        //-------------------------------------------------------------------
 
         getCommand("espadatrovao").setExecutor((sender, command, label, args) -> {
             if (sender instanceof Player) {
@@ -57,11 +73,30 @@ public final class Maridao extends JavaPlugin {
         });
 
         getServer().getPluginManager().registerEvents(new EspadaTrovão(), this);
+
+        //---------------------------------------------------
+
+        getCommand("home").setExecutor(new ComandoHome(this));
+
+        getCommand("sethome").setExecutor(new ComandoSetHome(this));
+
+        //arquivo de configuração
+        saveDefaultConfig();
+        config = getConfig();
+
     }
 
     @Override
     public void onDisable() {
         // Plugin shutdown logic
+        //salva a o arquivo de configuração
+        saveConfig();
+    }
+    public String getHomeLocation(String playerName) {
+        return config.getString("homes." + playerName, null);
+    }
+    public void saveHomeLocation (String playerName, String loc){
+        config.set("homes." + playerName, loc);
     }
 
     public static class Acessorios implements CommandExecutor {
