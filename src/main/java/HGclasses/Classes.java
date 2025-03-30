@@ -6,15 +6,23 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.EntityToggleGlideEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
+import org.bukkit.util.RayTraceResult;
 import org.bukkit.util.Vector;
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
+import draw.Particle.*;
 
 
 public class Classes implements Listener {
@@ -43,6 +51,68 @@ public class Classes implements Listener {
                     }
                 }
             }
+        }
+    }
+
+    @EventHandler
+    public void useSuperSpeedBoots(PlayerMoveEvent event){
+        Player player = event.getPlayer();
+        ItemStack boots = player.getInventory().getBoots();
+
+        if(boots == null){
+            return;
+        }
+
+        if (boots.getType() == Material.LEATHER_BOOTS && boots.getItemMeta().getDisplayName().equals("Superspeed")) {
+            player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED,60, 3));
+        }
+    }
+
+    @EventHandler
+    public void flyWithSuperElytra(EntityToggleGlideEvent event){
+        Player player = (Player) event.getEntity();
+        ItemStack elytra = player.getInventory().getChestplate();
+
+        if(event.isGliding() && elytra.getItemMeta().getDisplayName().equals("Fly")){
+            player.sendMessage("voando");
+            Vector v = player.getLocation().getDirection();
+            player.setVelocity(new Vector(v.getX() * 1.7, v.getY()*1.7, v.getZ()*1.7));
+        }
+    }
+
+    @EventHandler
+    public void useLaserEyes(PlayerInteractEvent event) {
+        if (!(event.getAction() == Action.RIGHT_CLICK_AIR || event.getAction() == Action.RIGHT_CLICK_BLOCK)) {
+            return;
+        }
+
+        ItemStack item = event.getItem();
+        if (item == null || item.getType() != Material.BLAZE_ROD || !item.hasItemMeta()) {
+            return;
+        }
+
+        ItemMeta meta = item.getItemMeta();
+        if (meta == null || !meta.hasDisplayName() || !meta.getDisplayName().equals("Raio Lazer")) {
+            return;
+        }
+
+        Player player = event.getPlayer();
+
+        Vector direction = player.getEyeLocation().getDirection();
+
+        RayTraceResult blockResult = player.getWorld().rayTraceBlocks(
+                player.getEyeLocation(), direction, 100, FluidCollisionMode.NEVER, true);
+
+        RayTraceResult entityResult = player.getWorld().rayTraceEntities(
+                player.getEyeLocation(), direction, 100, (entity) -> entity instanceof LivingEntity && entity != player);
+
+        if (entityResult != null && entityResult.getHitEntity() instanceof LivingEntity) {
+            LivingEntity entity = (LivingEntity) entityResult.getHitEntity();
+            entity.damage(10000);
+            Entity ent = player.getTargetEntity(100);
+            if(ent == null) return;
+            draw.Particle.Line(player, player.getEyeLocation(), ent.getLocation(), Particle.CRIT, 1000);
+            player.getWorld().spawnParticle(Particle.CRIT, ent.getLocation(), 10);
         }
     }
 
@@ -78,6 +148,15 @@ public class Classes implements Listener {
             player.setVelocity(new Vector(player.getVelocity().getX(),player.getVelocity().getY() + 2 , player.getVelocity().getZ()));
         }
     }
+
+    public static List<ItemStack> initSuperGirls(){
+        List<ItemStack> superGirls = new ArrayList<>();
+        superGirls.add(getSuperSpeed());
+        superGirls.add(getFly());
+        superGirls.add(getLazer());
+
+        return superGirls;
+    }
     
     public static ItemStack getBoots(){
         ItemStack stomperBoots = new ItemStack(Material.LEATHER_BOOTS);
@@ -86,6 +165,33 @@ public class Classes implements Listener {
         meta.setDisplayName("Stomper boots");
         stomperBoots.setItemMeta(meta);
         return stomperBoots;
+    }
+
+    public static ItemStack getSuperSpeed(){
+        ItemStack stomperBoots = new ItemStack(Material.LEATHER_BOOTS);
+        ItemMeta meta = stomperBoots.getItemMeta();
+
+        meta.setDisplayName("Superspeed");
+        stomperBoots.setItemMeta(meta);
+        return stomperBoots;
+    }
+
+    public static ItemStack getFly(){
+        ItemStack superElytra = new ItemStack(Material.ELYTRA);
+        ItemMeta meta = superElytra.getItemMeta();
+
+        meta.setDisplayName("Fly");
+        superElytra.setItemMeta(meta);
+        return superElytra;
+    }
+
+    public static ItemStack getLazer(){
+        ItemStack item = new ItemStack(Material.BLAZE_ROD);
+        ItemMeta meta = item.getItemMeta();
+
+        meta.setDisplayName("Raio Lazer");
+        item.setItemMeta(meta);
+        return item;
     }
 
     public static ItemStack getKangaroo(){

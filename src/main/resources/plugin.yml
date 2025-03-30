@@ -19,3 +19,5 @@ commands:
     description: Teleporta o jogador para casa
   sethome:
     description: Define a casa do jogador
+  superpoderosa:
+    description: voce se transforma em uma menina super poderosa

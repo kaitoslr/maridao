@@ -7,6 +7,7 @@ import org.bukkit.command.CommandException;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.Item;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -61,6 +62,19 @@ public final class Maridao extends JavaPlugin {
             }
             return true;
         });
+        //-------------------------------------------------------------------
+
+        getCommand("superpoderosa").setExecutor((sender, command, label, args) -> {
+            if (sender instanceof Player) {
+                Player jogador = (Player) sender;
+                for(ItemStack item : Classes.initSuperGirls()){
+                    jogador.getInventory().addItem(item);
+                }
+                jogador.sendMessage("§aVocê se tornou uma menina super poderosa!!!");
+            }
+            return true;
+        });
+
         //-------------------------------------------------------------------
 
         getCommand("espadatrovao").setExecutor((sender, command, label, args) -> {
