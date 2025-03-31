@@ -57,7 +57,7 @@ public class comandoPlot implements Listener {
     }
 
     public static void setClaim(Player player){
-        savePlotLocation(player.getName().toString(), loc1.toString(), loc2.toString());
+        savePlotLocation(player.getUniqueId().toString(), loc1.toString(), loc2.toString());
     }
 
 
