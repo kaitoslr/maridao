@@ -2,9 +2,11 @@ package Plot;
 
 
 import io.pluginteste.maridao.Maridao;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.data.BlockData;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -15,6 +17,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.scheduler.BukkitScheduler;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,7 +29,6 @@ public class comandoPlot implements Listener {
 
     @EventHandler
     public void useSetPlot(PlayerInteractEvent event){
-        event.setCancelled(true);
         if (!(event.getAction() == Action.RIGHT_CLICK_BLOCK || event.getAction() == Action.LEFT_CLICK_BLOCK)) {
             return;
         }
@@ -40,11 +42,12 @@ public class comandoPlot implements Listener {
             return;
         }
 
+        event.setCancelled(true);
         switch (event.getAction()){
             case Action.RIGHT_CLICK_BLOCK:
                 if(loc1 != null ) player.sendBlockChange(loc1, loc1.getBlock().getBlockData());
                 loc1 = event.getClickedBlock().getLocation();
-                player.sendBlockChange(loc1, Material.GLOWSTONE.createBlockData());
+                Bukkit.getScheduler().runTaskLater(JavaPlugin.getPlugin(Maridao.class) , ()->{player.sendBlockChange(loc1, Material.GLOWSTONE.createBlockData());}, 1);
                 player.sendMessage(" §6Local1 " + loc1.getX() + ", " + loc1.getZ());
                 break;
             case Action.LEFT_CLICK_BLOCK:
@@ -57,7 +60,7 @@ public class comandoPlot implements Listener {
     }
 
     public static void setClaim(Player player){
-        savePlotLocation(player.getName(), loc1.toString(), loc2.toString());
+        savePlotLocation(player.getUniqueId().toString(), loc1.toString(), loc2.toString());
     }
 
 
