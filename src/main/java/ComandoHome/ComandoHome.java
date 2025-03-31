@@ -23,7 +23,7 @@ public class ComandoHome implements CommandExecutor {
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String s, @NotNull String @NotNull [] strings) {
         if (sender instanceof Player) {
             Player player = (Player) sender;
-            String locString = maridao.getHomeLocation(player.getName());
+            String locString = maridao.getHomeLocation(player.getUniqueId().toString());
 
             String [] converte = locString.split(",");
             String worldName = converte[0];

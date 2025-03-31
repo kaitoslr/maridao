@@ -23,7 +23,8 @@ public class ComandoSetHome implements CommandExecutor {
             Location loc = player.getLocation();
 
             String locString = loc.getWorld().getName() + "," + loc.getBlockX() + "," + loc.getBlockY() + "," + loc.getBlockZ();
-            maridao.saveHomeLocation(player.getName(), locString);
+            maridao.saveHomeLocation(player.getUniqueId().toString(), locString);
+            maridao.saveConfig();
             player.sendMessage("Casa definida");
         }
         return true;
