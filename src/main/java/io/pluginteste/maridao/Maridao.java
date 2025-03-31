@@ -7,7 +7,6 @@ import org.bukkit.command.CommandException;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Entity;
-import org.bukkit.entity.Item;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -23,9 +22,6 @@ import HGclasses.Classes;
 import org.bukkit.configuration.file.FileConfiguration;
 import ComandoHome.ComandoSetHome;
 import Plot.comandoPlot;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public final class Maridao extends JavaPlugin {
 
@@ -115,7 +111,6 @@ public final class Maridao extends JavaPlugin {
         //---------------------------------------------------
 
         getCommand("home").setExecutor(new ComandoHome(this));
-
         getCommand("sethome").setExecutor(new ComandoSetHome(this));
 
         //arquivo de configuração

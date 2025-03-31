@@ -5,8 +5,7 @@ import io.pluginteste.maridao.Maridao;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.block.data.BlockData;
-import org.bukkit.entity.LivingEntity;
+
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -17,8 +16,6 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.scheduler.BukkitScheduler;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -54,13 +51,13 @@ public class comandoPlot implements Listener {
                 if(loc2 != null ) player.sendBlockChange(loc2, loc2.getBlock().getBlockData());
                 loc2 = event.getClickedBlock().getLocation();
                 player.sendBlockChange(loc2, Material.GLOWSTONE.createBlockData());
-                player.sendMessage(" §cLocal2 " + + loc2.getX() + ", " + loc2.getZ());
+                player.sendMessage(" §cLocal2 " +  loc2.getX() + ", " + loc2.getZ());
                 break;
         }
     }
 
     public static void setClaim(Player player){
-        savePlotLocation(player.getUniqueId().toString(), loc1.toString(), loc2.toString());
+        savePlotLocation(player.getName().toString(), loc1.toString(), loc2.toString());
     }
 
 
@@ -81,5 +78,7 @@ public class comandoPlot implements Listener {
         plotCord.add(loc1);
         plotCord.add(loc2);
         configuration.set("plot." + playerName, plotCord);
+        JavaPlugin.getPlugin(Maridao.class).saveConfig();
     }
+
 }
