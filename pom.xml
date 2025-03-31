@@ -33,7 +33,7 @@
                 <artifactId>maven-jar-plugin</artifactId>
                 <version>3.4.2</version>
                 <configuration>
-                    <outputDirectory>C:\Users\brcra\Downloads\server minecraft teste\plugins</outputDirectory>
+                    <outputDirectory>C:\Users\ramon\Downloads\servidor de testes\plugins</outputDirectory>
                 </configuration>
             </plugin>
             <plugin>
