@@ -21,3 +21,5 @@ commands:
     description: Define a casa do jogador
   superpoderosa:
     description: voce se transforma em uma menina super poderosa
+  plot:
+    description: Stick de plot

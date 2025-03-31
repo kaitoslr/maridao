@@ -22,6 +22,10 @@ import org.bukkit.scheduler.BukkitRunnable;
 import HGclasses.Classes;
 import org.bukkit.configuration.file.FileConfiguration;
 import ComandoHome.ComandoSetHome;
+import Plot.comandoPlot;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public final class Maridao extends JavaPlugin {
 
@@ -74,6 +78,26 @@ public final class Maridao extends JavaPlugin {
             }
             return true;
         });
+
+        //-------------------------------------------------------------------
+
+        getCommand("plot").setExecutor((sender, command, label, args) -> {
+            if(args[0].equals("give")){
+                if (sender instanceof Player) {
+                    Player jogador = (Player) sender;
+                    jogador.getInventory().addItem(comandoPlot.getStick());
+                    jogador.sendMessage("§aVocê se tornou uma menina super poderosa!!!");
+                }
+                return true;
+            }
+
+            if(args[0].equals("claim")){
+                comandoPlot.setClaim((Player) sender);
+                return true;
+            }
+            return true;
+        });
+        getServer().getPluginManager().registerEvents(new comandoPlot(), this);
 
         //-------------------------------------------------------------------
 
